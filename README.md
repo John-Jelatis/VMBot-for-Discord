@@ -1,5 +1,5 @@
 # VMBot for Discord
-## ...because why not
+<img src='icon.gif' />
 
 ## Description 
 This is a very simple bot really, it will allow you to interact with devices using the VNC Protocol via Discord. It's not really practical, as usability isn't great, however it was a fun little project.

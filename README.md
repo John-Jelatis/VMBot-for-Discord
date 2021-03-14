@@ -57,10 +57,15 @@ Some vague steps on how to setup this bot:
        * Make sure your bot token is valid and that it can post images.
        * You can disable this by removing the module from `config.json`.
 
- 4. Launch with the script in that directory (or manually, but make sure to be in the right directory)
-    * On Windows, you will obviously want the batch script; `Start-VMBot.bat`.
+ 4. Install dependencies
+    * On Windows, you will obviously want the batch script; `Install-Deps.bat`.
       * It's been years since I've mained Windows; if my batch script is broken, please put up an issue or pull request. 
-      * This makes sure that `npm install` is run not only within the `vmbot` folder, but within it's modules too.
+    * On macOS and Linux, you will want to run the shell script; `Install-Deps.command`.
+    * This makes sure that `npm install` is run not only within the `vmbot` folder, but within it's modules too.
+
+
+ 5. Launch with the script in that directory (or manually, but make sure to be in the right directory)
+    * On Windows, you will obviously want the batch script; `Start-VMBot.bat`.
     * On macOS and Linux, you will want to run the shell script; `Start-VMBot.command`.
     * Both of these scripts are set to auto-restart the bot should it crash.
 

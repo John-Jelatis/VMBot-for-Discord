@@ -1,0 +1,22 @@
+{
+  "name": "vmbot",
+  "version": "0.1.0",
+  "description": "Virtual Machine as a Discord Bot (and more!)",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [
+    "Virtual",
+    "Machine",
+    "VM",
+    "Discord",
+    "Bot"
+  ],
+  "author": "John Jelatis <john.jelatis@gmail.com>",
+  "license": "WTFPL",
+  "dependencies": {
+    "canvas": "^2.7.0",
+    "rfb2": "^0.2.2"
+  }
+}

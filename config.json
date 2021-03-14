@@ -1,0 +1,30 @@
+{
+    "vms": [
+        {
+            "name": "Windows NT 4.0",
+            "id": "winnt4",
+            "hwInf": {
+                "cpu": "MIPS64-el",
+                "ram": 192,
+                "hda": 4096,
+                "other": "Windows NT 4.0 - but running on a RISC-based architecture; MIPS!"
+            },
+            "ip": "192.168.1.10", "port": 5900
+        },
+        {
+            "name": "Windows ME",
+            "id": "winme",
+            "hwInf": {
+                "cpu": "i386",
+                "ram": 96,
+                "hda": 2048,
+                "other": "Windows ME is the greatest OS that Microsoft has produced yet!"
+            },
+            "ip": "192.168.1.10", "port": 5901
+        }
+    ],
+    "modules": [
+        "discord-bot",
+        "http-server"
+    ]
+}

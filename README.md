@@ -9,27 +9,29 @@ When setting up VMs, note that I only tested this on QEMU/KVM (with the argument
 
 ## Usage
 There are a handful of commands in the bot, here's a copy of the output of `!help` as it stands as of the writing of this document (subject to expansion/change - note that the commands requiring admin privs only show for users who have such permissions):
+ 
 **Help Menu**
+ 
 1. !prefix
-  Change bot prefix [requires admin privs]
+  * Change bot prefix [requires admin privs]
 2. !default-vm
-  Change default bot [requires admin privs]
+  * Change default bot [requires admin privs]
 3. !reconnect-vm
-  Reconnect to a bot [requires admin privs]
+  * Reconnect to a bot [requires admin privs]
 4. !list
-  List bots you can select and interact with.
+  * List bots you can select and interact with.
 5. !select
-  Select bot to interact with.
+  * Select bot to interact with.
 6. !screen
-  View your selected VM's screen.
+  * View your selected VM's screen.
 7. !press
-  Press keys.
+  * Press keys.
 8. !click
-  Press the mouse buttons.
+  * Press the mouse buttons.
 9. !type
-  Press lots of buttons sequentially as to type.
+  * Press lots of buttons sequentially as to type.
 10. !mouse
-  Move the mouse.
+  * Move the mouse.
 
 ## Setup
 Some vague steps on how to setup this bot:

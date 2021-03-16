@@ -482,7 +482,7 @@ DiscordBot.prototype.commandClick = function(msg, command) {
 };
 
 DiscordBot.prototype.getActiveVM = function(msg) {
-    return this.userInfo[msg.author.id] || this.getServerInfo(msg.guild.id).default || this.vms[0].id;
+    return this.userInfo[msg.author.id] || this.getServerInfo(msg.guild.id, 'default') || this.vms[0].id;
 };
 
 DiscordBot.prototype.setActiveVM = function(msg, val) {

@@ -324,7 +324,7 @@ DiscordBot.prototype.commandReconnectVM = function(msg, command) {
 
 DiscordBot.prototype.commandPress = function(msg, command) {
     if(command.length < 2) {
-        msg.channel.send('Usage: `' + this.getServerInfo(msg.guild.id, 'prefix') + 'press [keyId]`\nValid keyIds: `' + Object.keys(keymap).join('`, `') + '`');
+        msg.channel.send('Usage: `' + this.getServerInfo(msg.guild.id, 'prefix') + 'press [keyId]`\nValid keyIds: `' + Object.keys(this.keymap).join('`, `') + '`');
         return ;
     }
 

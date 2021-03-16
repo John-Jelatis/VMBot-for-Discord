@@ -6,4 +6,6 @@ for /f %%f in ('dir /b') do (
   npm install
   cd ..
 )
+cd ..
 npm install
+cd ..

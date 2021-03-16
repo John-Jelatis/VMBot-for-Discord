@@ -2,10 +2,12 @@
 
 echo Installing dependencies...
 
-cd modules
+cd vmbot/modules
 for x in $(ls); do
   cd $x
   npm install
   cd ..
 done
-npm init
+cd ..
+npm install
+cd ..

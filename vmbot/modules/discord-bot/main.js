@@ -42,10 +42,14 @@ function DiscordBot(vms, cfg) {
         if(msg.author.bot)
             return ;
 
+        if(!msg.guild.id)
+            return ;
+    
+
         var pre = self.getServerInfo(msg.guild.id, 'prefix');
         if(!pre) {
             pre = '!';
-            self.getServerInfo(msg.guild.id, 'prefix') = pre;
+            self.setServerInfo(msg.guild.id, 'prefix', pre);
         }
 
         if(msg.content.indexOf(pre) !== 0)
@@ -67,13 +71,13 @@ DiscordBot.prototype.handleCommand = function(msg, command) {
         },
         {
             'cmd': 'default-vm',
-            'aliases': [ ],
+            'aliases': [ 'set-default' ],
             'help': 'Change default bot [requires admin privs]',
             'disp': msg.member.hasPermission(8)
         },
         {
             'cmd': 'reconnect-vm',
-            'aliases': [ ],
+            'aliases': [ 'reconnect' ],
             'help': 'Reconnect to a bot [requires admin privs]',
             'disp': msg.member.hasPermission(8)
         },
@@ -128,10 +132,12 @@ DiscordBot.prototype.handleCommand = function(msg, command) {
             break ;
 
         case 'default-vm':
+        case 'set-default':
             shouldSendScr = this.commandDefaultVM(msg, command);
             break ;
 
         case 'reconnect-vm':
+        case 'reconnect':
             shouldSendScr = this.commandReconnectVM(msg, command);
             break ;
 
@@ -262,8 +268,10 @@ DiscordBot.prototype.commandSelect = function(msg, command) {
         return ;
     }
 
-    msg.channel.send('Selected ' + vm.inf.name + '!\nFrom now on, all commands you run through the bot will be fed through to this VM.');
+    msg.channel.send('Selected ' + vm.inf.name + '!\nFrom now on, all commands you run through the bot will be fed through to this VM.\n' + vm.inf.name + '\'s screen at the moment:');
     this.setActiveVM(msg, command[1]);
+
+    return { 'id': this.getActiveVM(msg) };
 };
 
 DiscordBot.prototype.commandPrefix = function(msg, command) {
@@ -330,6 +338,9 @@ DiscordBot.prototype.commandPress = function(msg, command) {
 
     var keys = command.slice(1);
     for(var ix = 0; ix < keys.length; ++ ix) {
+        if(!keys[ix] || keys[ix].length < 1)
+            continue;
+
         if(!this.keymap[keys[ix]]) {
             msg.channel.send('Unknown key `' + keys[ix] + '`.');
             return ;

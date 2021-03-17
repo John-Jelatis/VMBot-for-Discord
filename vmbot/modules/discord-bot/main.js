@@ -42,7 +42,8 @@ function DiscordBot(vms, cfg) {
         if(msg.author.bot)
             return ;
 
-        if(!msg.guild.id)
+	// apparently DMs can cause issues D:
+        if(!msg.guild || msg.guild.id)
             return ;
     
 

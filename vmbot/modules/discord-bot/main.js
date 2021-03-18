@@ -39,14 +39,19 @@ function DiscordBot(vms, cfg) {
 
     var self = this;
     this.bot.on('message', function(msg) {
+	// apparently DMs can cause issues D:
+        if(!msg.guild || !msg.guild.id)
+            return ;
+
+        // apparently joining servers can too D:<
+        if(!msg.author || !msg.author.id)
+            return ;
+
+        // prevent bots from using this bot
         if(msg.author.bot)
             return ;
 
-	// apparently DMs can cause issues D:
-        if(!msg.guild || msg.guild.id)
-            return ;
-    
-
+        // get prefix
         var pre = self.getServerInfo(msg.guild.id, 'prefix');
         if(!pre) {
             pre = '!';

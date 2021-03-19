@@ -118,6 +118,12 @@ DiscordBot.prototype.handleCommand = function(msg, command) {
             'disp': true
         },
         {
+            'cmd': 'rclick',
+            'aliases': [ 'rc' ],
+            'help': 'Press the right mouse button.',
+            'disp': true
+        },
+        {
             'cmd': 'type',
             'aliases': [ 't' ],
             'help': 'Press lots of buttons sequentially as to type.',
@@ -174,6 +180,11 @@ DiscordBot.prototype.handleCommand = function(msg, command) {
         case 'click':
         case 'c':
             shouldSendScr = this.commandClick(msg, command);
+            break ;
+
+        case 'rclick':
+        case 'rc':
+            shouldSendScr = this.commandClick(msg, command, 0b100);
             break ;
 
         case 'type':
@@ -475,7 +486,7 @@ DiscordBot.prototype.commandMouse = function(msg, command) {
     return { 'id': this.getActiveVM(msg), 'timeout': 250 };
 };
 
-DiscordBot.prototype.commandClick = function(msg, command) {
+DiscordBot.prototype.commandClick = function(msg, command, override) {
     if(command.length > 1 && command[1].match(/^(l(eft|)|m(iddle)|r(ight|))$/) === null) {
         msg.channel.send('Usage: !click [l(eft)|m(iddle)|r(ight)|]');
         return ;
@@ -484,7 +495,9 @@ DiscordBot.prototype.commandClick = function(msg, command) {
     var vm = this.getVmById(this.getActiveVM(msg));
 
     var btn = 0;
-    if(command.length > 1) {
+    if(override) {
+        btn = override;
+    } else if(command.length > 1) {
         btn ^= 0b100 * (command[1][0] === 'r');
         btn ^= 0b10 * (command[1][0] === 'm');
         btn ^= 0b1 * (command[1][0] === 'l');

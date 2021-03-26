@@ -1,6 +1,8 @@
 var rfb2 = require('rfb2'),
     canvas = require('canvas');
 
+var chP = require('child_process');
+
 var logPre = '[VM] ';
 
 function VMConnection(inf) {
@@ -21,10 +23,15 @@ VMConnection.prototype.connect = function() {
     if(this.connection !== null)
         this.connection.end();
 
-    this.connection = rfb2.createConnection({
+    var cfg = {
         'host': this.inf.ip,
         'port': this.inf.port
-    });
+    };
+
+    if(this.inf.password)
+        cfg.password = this.inf.password;
+
+    this.connection = rfb2.createConnection(cfg);
 
     var self = this;
     this.connection.on('rect', function(rect) {
@@ -47,6 +54,15 @@ VMConnection.prototype.connect = function() {
     this.connection.on('error', function() {
         // oof
         console.info(logPre + self.inf.name + ' has encountered an error; reconnecting in 15s.');
+
+        if(self.inf.onError) {
+            chProcess.exec(self.inf.onError, () => {
+                console.info(logPre + self.inf.name + ' has executed the onError command.');
+                setTimeout(self.connect.bind(self), 15000);
+            });
+            return ;
+        }
+
         setTimeout(self.connect.bind(self), 15000);
     });
 

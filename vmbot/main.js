@@ -66,10 +66,7 @@ var startModule = function(ix, dep) {
     }
 };
 
-var restarts = [ ];
 for(var ix = 0; ix < config.modules.length; ++ ix) {
-    restarts.push(0);
-
     // if it crashes more than 10 times, then something is really wrong.
     startModule(ix, 10);
 }

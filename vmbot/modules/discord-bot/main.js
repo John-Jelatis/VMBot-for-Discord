@@ -39,7 +39,7 @@ function DiscordBot(vms, cfg) {
 
     var self = this;
     this.bot.on('message', function(msg) {
-	// apparently DMs can cause issues D:
+        // apparently DMs can cause issues D:
         if(!msg.guild || !msg.guild.id)
             return ;
 
@@ -449,10 +449,11 @@ DiscordBot.prototype.commandType = function(msg, command) {
 };
 
 DiscordBot.prototype.commandMouse = function(msg, command) {
-    if(command.length < 3) {
+    if(command.length < 2) {
         msg.channel.send('Usage:\n \\\u2022 `' + this.getServerInfo(msg.guild.id, 'prefix') +
             'mouse [x] [y]` (absolute positioning) or\n \\\u2022 `' + this.getServerInfo(msg.guild.id, 'prefix') +
-            'mouse [up|down|left|right] [amount]` (relative positioning)');
+            'mouse [up|down|left|right] [amount]` (relative positioning) or \n \\\u2022 `' + this.getServerInfo(msg.guild.id, 'prefix') +
+            'mouse [hold]` (hold until after next mouse event)');
         return ;
     }
 
@@ -465,20 +466,25 @@ DiscordBot.prototype.commandMouse = function(msg, command) {
         if(!isNaN(x)) vm.mouse[0] = x;
         if(!isNaN(y)) vm.mouse[1] = y;
     } else {
-        var ang = [ 'right', 'down', 'left', 'up' ],
-            ix = ang.indexOf(command[1]) * Math.PI / 2;
+        if(command[1] === 'hold') {
+            vm.connection.pointerEvent(vm.mouse[0], vm.mouse[1], 1);
+            return { 'id': this.getActiveVM(msg), 'timeout': 150 };
+        } else {
+            var ang = [ 'right', 'down', 'left', 'up' ],
+                ix = ang.indexOf(command[1]) * Math.PI / 2;
 
-        if(ix < 0) {
-            msg.channel.send('Invalid direction!\nUsage for relative movements:\n \\\u2022 `' + this.getServerInfo(msg.guild.id, 'prefix') +
-                'mouse [up|down|left|right] [amount]` (relative positioning)');
-            return ;
+            if(ix < 0) {
+                msg.channel.send('Invalid direction!\nUsage for relative movements:\n \\\u2022 `' + this.getServerInfo(msg.guild.id, 'prefix') +
+                    'mouse [up|down|left|right] [amount]` (relative positioning)');
+                return ;
+            }
+
+            var x = parseInt(command[2]) * Math.cos(ix),
+                y = parseInt(command[2]) * Math.sin(ix);
+
+            if(!isNaN(x)) vm.mouse[0] += x;
+            if(!isNaN(y)) vm.mouse[1] += y;
         }
-
-        var x = parseInt(command[2]) * Math.cos(ix),
-            y = parseInt(command[2]) * Math.sin(ix);
-
-        if(!isNaN(x)) vm.mouse[0] += x;
-        if(!isNaN(y)) vm.mouse[1] += y;
     }
 
     vm.connection.pointerEvent(vm.mouse[0], vm.mouse[1], 0);
@@ -488,7 +494,7 @@ DiscordBot.prototype.commandMouse = function(msg, command) {
 
 DiscordBot.prototype.commandClick = function(msg, command, override) {
     if(command.length > 1 && command[1].match(/^(l(eft|)|m(iddle)|r(ight|))$/) === null) {
-        msg.channel.send('Usage: !click [l(eft)|m(iddle)|r(ight)|]');
+        msg.channel.send('Usage: `' + this.getServerInfo(msg.guild.id, 'prefix') + 'click [l(eft)|m(iddle)|r(ight)|]`');
         return ;
     }
 

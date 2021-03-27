@@ -66,6 +66,14 @@ function DiscordBot(vms, cfg) {
 };
 
 DiscordBot.prototype.handleCommand = function(msg, command) {
+    var ixOfCh = (this.getServerInfo(msg.guild.id, 'blacklist') || '')
+        .split(',')
+        .indexOf(msg.channel.id);
+
+    if(!msg.member.hasPermission(8) && -1 !== ixOfCh) {
+        return ;
+    }
+
     var shouldSendScr = null;
 
     var commands = [
@@ -73,6 +81,12 @@ DiscordBot.prototype.handleCommand = function(msg, command) {
             'cmd': 'prefix',
             'aliases': [ 'pre' ],
             'help': 'Change bot prefix [requires admin privs]',
+            'disp': msg.member.hasPermission(8)
+        },
+        {
+            'cmd': 'channel',
+            'aliases': [ ],
+            'help': 'Manage bot channels [requires admin privs]',
             'disp': msg.member.hasPermission(8)
         },
         {
@@ -141,6 +155,10 @@ DiscordBot.prototype.handleCommand = function(msg, command) {
         case 'prefix':
         case 'pre':
             shouldSendScr = this.commandPrefix(msg, command);
+            break ;
+
+        case 'channel':
+            shouldSendScr = this.commandChannel(msg, command);
             break ;
 
         case 'default-vm':
@@ -304,6 +322,75 @@ DiscordBot.prototype.commandPrefix = function(msg, command) {
 
     msg.channel.send('Prefix has been changed from ' + this.getServerInfo(msg.guild.id, 'prefix') + ' to ' + command[1]);
     this.setServerInfo(msg.guild.id, 'prefix', command[1]);
+};
+
+DiscordBot.prototype.commandChannel = function(msg, command) {
+    if(!msg.member.hasPermission(8)) {
+        msg.channel.send('You need the **manage server** permission to change the bot\'s channel configuration.');
+        return ;
+    }
+
+    if(command.length < 2) {
+        msg.channel.send('Usage: `' + this.getServerInfo(msg.guild.id, 'prefix') + 'channel [whitelist|blacklist|whitelist-all|blacklist-all]`.');
+        return ;
+    }
+
+    var blacklistStr = this.getServerInfo(msg.guild.id, 'blacklist') || '',
+        blacklist = blacklistStr.split(',');
+
+    switch(command[1]) {
+        case 'blacklist-all':
+            var server = msg.guild;
+
+            if(!server.channels || !server.channels.cache) {
+                msg.channel.send('Failed to get channel listing; ensure the bot has such permissions as are needed.');
+                break ; 
+            }
+
+            blacklist = [ ];
+
+            var chnls = server.channels.cache.array(),
+                count = 0;
+
+            for(var ix = 0; ix < chnls.length; ++ ix) {
+                console.log(chnls[ix].type);
+                if(chnls[ix].deleted || chnls[ix].type !== 'text')
+                    continue ;
+
+                ++ count;
+                blacklist.push(chnls[ix].id);
+            }
+
+            msg.channel.send(count + ' channels blacklisted.');
+            break ;
+
+        case 'blacklist':
+            var ixOf = blacklist.indexOf(msg.channel.id);
+            if(ixOf >= 0) {
+                msg.channel.send('Channel already blacklisted.');
+                break ;
+            }
+            msg.channel.send('Channel blacklisted.');
+            blacklist.push(msg.channel.id);
+            break ;
+
+        case 'whitelist-all':
+            blacklist = [ ];
+            msg.channel.send('All channels whitelisted.');
+            break ;
+
+        case 'whitelist':
+            var ixOf = blacklist.indexOf(msg.channel.id);
+            if(ixOf < 0) {
+                msg.channel.send('Channel already whitelisted.');
+                break ;
+            }
+            msg.channel.send('Channel whitelisted.');
+            blacklist.splice(ixOf, 1);
+            break ;
+    }
+
+    this.setServerInfo(msg.guild.id, 'blacklist', blacklist.join(','));
 };
 
 DiscordBot.prototype.commandDefaultVM = function(msg, command) {

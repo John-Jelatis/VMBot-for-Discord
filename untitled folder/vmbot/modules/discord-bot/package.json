@@ -1,0 +1,21 @@
+{
+  "name": "vmbot-discord",
+  "version": "0.1.0",
+  "description": "Virtual Machine as a Discord Bot - Discord Support Plugin",
+  "main": "main.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "keywords": [
+    "Virtual",
+    "Machine",
+    "VM",
+    "Discord",
+    "Bot"
+  ],
+  "author": "John Jelatis <john.jelatis@gmail.com>",
+  "license": "WTFPL",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  }
+}

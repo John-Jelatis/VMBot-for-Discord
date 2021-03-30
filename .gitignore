@@ -1,3 +1,6 @@
 node_modules
 **/node_modules
 .data-discord-bot.json
+config-discord-bot.json
+config-http-server.JSON
+config.json

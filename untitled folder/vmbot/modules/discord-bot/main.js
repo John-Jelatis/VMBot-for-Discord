@@ -476,7 +476,7 @@ DiscordBot.prototype.commandRebootVM = function(msg, command) {
         rebootThese[ix].reboot();
     }
 
-    msg.channel.send('Reconnected ' + rebootThese.length + ' VM(s).\n' + (rebootThese.length === 0 ? 'Are you sure you specified valid Bot IDs?' : 'Please wait a few seconds for the bots to reconnect.'));
+    msg.channel.send('Reconnected ' + rebootThese.length + ' VM(s).\n' + (count === 0 ? 'Are you sure you specified valid Bot IDs?' : 'Please wait a few seconds for the bots to reconnect.'));
 };
 
 DiscordBot.prototype.commandPress = function(msg, command) {

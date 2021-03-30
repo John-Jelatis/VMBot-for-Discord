@@ -1,0 +1,17 @@
+{
+  "name": "vmbot-http",
+  "version": "0.1.0",
+  "description": "Virtual Machine as a Discord Bot - HTTP Support Plugin",
+  "main": "main.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "keywords": [
+    "Virtual",
+    "Machine",
+    "VM",
+    "HTTP"
+  ],
+  "author": "John Jelatis <john.jelatis@gmail.com>",
+  "license": "WTFPL"
+}

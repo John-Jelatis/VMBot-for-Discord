@@ -387,7 +387,7 @@ DiscordBot.prototype.commandChannel = function(msg, command) {
 
         case 'blacklist-all':
             whitelist = [ ];
-            msg.channel.send('All channels removed from whitelist.');
+            msg.channel.send('All channels blacklisted.');
             break ;
 
         case 'blacklist':
@@ -396,7 +396,7 @@ DiscordBot.prototype.commandChannel = function(msg, command) {
                 msg.channel.send('Channel already blacklisted.');
                 break ;
             }
-            msg.channel.send('Channel removed from whitelist.');
+            msg.channel.send('Channel blacklisted.');
             whitelist.splice(ixOf, 1);
             break ;
     }

@@ -23,6 +23,7 @@
             "ip": "192.168.1.10", "port": 5901
         }
     ],
+    "exitOnError": true,
     "modules": [
         "discord-bot",
         "http-server"

@@ -66,12 +66,13 @@ function DiscordBot(vms, cfg) {
 };
 
 DiscordBot.prototype.handleCommand = function(msg, command) {
-    var ixOfCh = (this.getServerInfo(msg.guild.id, 'blacklist') || '')
-        .split(',')
-        .indexOf(msg.channel.id);
+    var whitelist = this.getServerInfo(msg.guild.id, 'whitelist');
 
-    if(!msg.member.hasPermission(8) && -1 !== ixOfCh) {
-        return ;
+    // if there is a whitelist and the user isn't admin
+    if(whitelist && !msg.member.hasPermission(8)) {
+        // then check if they are whitelisted
+        var index = whitelist.split(',').indexOf(msg.channel.id);
+        if(index < 0) return ; // not whitelisted, so fck off
     }
 
     var shouldSendScr = null;
@@ -346,11 +347,11 @@ DiscordBot.prototype.commandChannel = function(msg, command) {
         return ;
     }
 
-    var blacklistStr = this.getServerInfo(msg.guild.id, 'blacklist') || '',
-        blacklist = blacklistStr.split(',');
+    var whitelistStr = this.getServerInfo(msg.guild.id, 'whitelist') || '',
+        whitelist = whitelistStr.split(',');
 
     switch(command[1]) {
-        case 'blacklist-all':
+        case 'whitelist-all':
             var server = msg.guild;
 
             if(!server.channels || !server.channels.cache) {
@@ -358,7 +359,7 @@ DiscordBot.prototype.commandChannel = function(msg, command) {
                 break ; 
             }
 
-            blacklist = [ ];
+            whitelist = [ ];
 
             var chnls = server.channels.cache.array(),
                 count = 0;
@@ -369,39 +370,39 @@ DiscordBot.prototype.commandChannel = function(msg, command) {
                     continue ;
 
                 ++ count;
-                blacklist.push(chnls[ix].id);
+                whitelist.push(chnls[ix].id);
             }
 
-            msg.channel.send(count + ' channels blacklisted.');
-            break ;
-
-        case 'blacklist':
-            var ixOf = blacklist.indexOf(msg.channel.id);
-            if(ixOf >= 0) {
-                msg.channel.send('Channel already blacklisted.');
-                break ;
-            }
-            msg.channel.send('Channel blacklisted.');
-            blacklist.push(msg.channel.id);
-            break ;
-
-        case 'whitelist-all':
-            blacklist = [ ];
-            msg.channel.send('All channels whitelisted.');
+            msg.channel.send(count + ' channels whitelisted.');
             break ;
 
         case 'whitelist':
-            var ixOf = blacklist.indexOf(msg.channel.id);
-            if(ixOf < 0) {
+            var ixOf = whitelist.indexOf(msg.channel.id);
+            if(ixOf >= 0) {
                 msg.channel.send('Channel already whitelisted.');
                 break ;
             }
             msg.channel.send('Channel whitelisted.');
-            blacklist.splice(ixOf, 1);
+            whitelist.push(msg.channel.id);
+            break ;
+
+        case 'blacklist-all':
+            whitelist = [ ];
+            msg.channel.send('All channels removed from whitelist.');
+            break ;
+
+        case 'blacklist':
+            var ixOf = whitelist.indexOf(msg.channel.id);
+            if(ixOf < 0) {
+                msg.channel.send('Channel already blacklisted.');
+                break ;
+            }
+            msg.channel.send('Channel removed from whitelist.');
+            whitelist.splice(ixOf, 1);
             break ;
     }
 
-    this.setServerInfo(msg.guild.id, 'blacklist', blacklist.join(','));
+    this.setServerInfo(msg.guild.id, 'whitelist', whitelist.join(','));
 };
 
 DiscordBot.prototype.commandDefaultVM = function(msg, command) {

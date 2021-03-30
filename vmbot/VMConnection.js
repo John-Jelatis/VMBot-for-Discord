@@ -56,7 +56,7 @@ VMConnection.prototype.connect = function() {
         console.info(logPre + self.inf.name + ' has encountered an error; reconnecting in 15s.');
 
         if(self.inf.onError) {
-            chProcess.exec(self.inf.onError, () => {
+            chP.exec(self.inf.onError, function() {
                 console.info(logPre + self.inf.name + ' has executed the onError command.');
                 setTimeout(self.connect.bind(self), 15000);
             });

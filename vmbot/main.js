@@ -13,8 +13,7 @@
  *
  */
 
-var fs = require('fs'),
-    cproc = require('child_process');
+var fs = require('fs');
 
 var VMConnection = require('./VMConnection.js');
 var config;

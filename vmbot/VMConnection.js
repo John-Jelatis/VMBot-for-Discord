@@ -80,7 +80,7 @@ VMConnection.prototype.connect = function() {
 VMConnection.prototype.reboot = function() {
     var self = this;
 
-    chP.exec(self.inf.reboot, function() {
+    if(self.inf.reboot) chP.exec(self.inf.reboot, function() {
         console.info(logPre + self.inf.name + ' has executed the reboot command.');
         setTimeout(self.connect.bind(self), 3000);
     });

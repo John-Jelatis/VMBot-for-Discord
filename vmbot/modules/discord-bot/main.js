@@ -365,7 +365,6 @@ DiscordBot.prototype.commandChannel = function(msg, command) {
                 count = 0;
 
             for(var ix = 0; ix < chnls.length; ++ ix) {
-                console.log(chnls[ix].type);
                 if(chnls[ix].deleted || chnls[ix].type !== 'text')
                     continue ;
 
